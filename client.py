@@ -1,32 +1,34 @@
-
-import socket
-from time import *
-import sys
-import time
+# Adit Patil
+# ID:1001757372
 
 
-HOST=
-PORT=
-fileName=
+import socket  # for socket connection
+import os  # for renaming files
+import webbrowser  # for opening webpages
+import random  # to generate random numbers
+
+url = input()
+# creating client socket
+csocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+csocket.connect((socket.gethostname(), 8080))   # connecting to server
+
+csocket.send(bytes(url, "UTF-8"))  # sending data to server
 
 
-
-clientSocket = socket.socket()
-
-print'Client has been established'
-server_add = ()
-
-clientSocket.connect()
-# connect the host and port to the socket
-send_time = time.time()
-clientSocket.send()
-
-
-data=clientSocket.recv(1024)
-recv_time = time.time()
-RTT = recv_time - send_time
-print'Data received by the client is', data
-print'RTT ', RTT
-
-'''Print other vvalues here '''
- ''' close socket '''
+msg = csocket.recv(1024)  # receiving message from client
+message = msg.decode("UTF-8")
+print("C: ", message)
+check = "HTTP/1.1 200 OK"
+if message == check:
+    num = random.randint(1, 100)  # creating a random number for file
+    msg = csocket.recv(1024)  # receiving message from server
+    filecontent = msg.decode("UTF-8")  # decoding message
+    f = open("index%s.txt" % num, 'w')
+    f.write(filecontent)    # writing contents into text file
+    f.close()
+    os.rename("index%s.txt" % num, "index%s.html" %
+              num)  # renaming text file to html file
+    webbrowser.open("index%s.html" % num, new=2)  # open in new tab
+    csocket.close()
+else:
+    csocket.close()

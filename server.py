@@ -28,34 +28,31 @@ serverSocket.listen(5)
 
 
 def multi_thread(connectionSocket):
-        if clienturl == url1 or clienturl == url2 or clienturl == url3:
-            clientsocket.send(bytes("HTTP/1.1 200 OK", "UTF-8"))
+    if clienturl == url1 or clienturl == url2 or clienturl == url3:
         # Extract the path of the requested object from the message
-
-        message = connectionSocket.recv(1024).decode('utf-8')
-
-        f = open(message, 'rb')
-
-        # Store the entire contenet of the requested file in a temporary buffer
-
-        outputdata = f.read()
-
-        # Send the HTTP response header line to the connection socket
-
-        # Send the content of the requested file to the connection socket
-
-    # Close the socket in case of some issues
-    connectionSocket.close()
+        clientsocket.send(bytes("HTTP/1.1 200 OK", "UTF-8"))
+        filename = 'index.html'  # sending html page to client
+        f = open(filename, 'rb')
+        l = f.read(1024)
+        while (l):
+            clientsocket.send(l)
+            print('S: Sent data to client sucessfully ')
+            l = f.read(1024)
+        f.close()  # closing the socket once file is sent
+        clientsocket.close()  # closing the socket once data is sent
+    else:
+        print(f'S: Failed to connect with client with address {address} ')
+        # sending failure header to client
+        clientsocket.send(bytes("HTTP/1.1 404 Not Found", "UTF-8"))
+        clientsocket.close()  # closing the socket once  data is sent
 
 
 while True:
-    '''This part is for multi threading'''
-    print 'Ready to serve'
-    '''Start the new thread'''
-
-
-
-
-
-
-
+    clientsocket, address = serversocket.accept()
+    print(
+        f"S: Connection Successful! Connected to client with address {address}")
+    msg = clientsocket.recv(1024)  # receiving message from client
+    clienturl = msg.decode("UTF-8")
+    # creating thread for every client coming in
+    t = threading.Thread(target=task1, name='t', args=(clienturl,))
+    t.start()
