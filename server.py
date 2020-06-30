@@ -1,50 +1,50 @@
 
 # Import socket module
-
+import socket
 # Import thread module
+import threading
 
 
+url1 = "http://localhost:8080/index.html"
+url2 = "http://localhost:8080/"         # storing the correct urls for comparison
 # Create a TCP server socket
 
 
-serverSocket = socket.socket()  
+serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Assign a port number
-serverPort = 
+serverPort = 8080
 
 
 # Bind the socket to server address and server port
 
-serverSocket.bind()
+serversocket.bind((socket.gethostname(), serverPort))
 
 # Listen to at most 5 connection at a time
 
-serverSocket.listen()
+serverSocket.listen(5)
 
 # Server should be up and running and listening to the incoming connections
 
+
 def multi_thread(connectionSocket):
-    try:
-
+        if clienturl == url1 or clienturl == url2 or clienturl == url3:
+            clientsocket.send(bytes("HTTP/1.1 200 OK", "UTF-8"))
         # Extract the path of the requested object from the message
-
 
         message = connectionSocket.recv(1024).decode('utf-8')
 
-        f = open(message,'rb')
+        f = open(message, 'rb')
 
         # Store the entire contenet of the requested file in a temporary buffer
 
         outputdata = f.read()
 
-
         # Send the HTTP response header line to the connection socket
-
 
         # Send the content of the requested file to the connection socket
 
-
-    # Close the socket in case of some issues 
+    # Close the socket in case of some issues
     connectionSocket.close()
 
 
